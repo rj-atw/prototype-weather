@@ -5,11 +5,15 @@
   "description": "looks up the weather & current time for an input set of locations and zipcodes",
   "man": "./man/weather.1",
   "scripts": {
-    "prepare": "curl http://bulk.openweathermap.org/sample/current.city.list.min.json.gz | gzip -d > current.city.list.min.json"
+    "prepare": "curl http://bulk.openweathermap.org/sample/current.city.list.min.json.gz | gzip -d > current.city.list.min.json",
+    "test": "mocha"
   },
   "dependencies": {
     "moment-timezone": "^0.5.27",
     "request": "^2.88.0",
     "tz-lookup": "^6.1.25"
+  },
+  "devDependencies": {
+    "mocha": "^7.0.1"
   }
 }
