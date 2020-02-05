@@ -9,7 +9,15 @@ class LocationError {
   }
 }
 
+function latinise(word) {
+  return word.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+}
+
 function getTimeFromLocation(currentTime, location) {
+  // openweathermap database has latinised (ascii) version of location name
+  // e.g. "São Paulo" -> "Sao Paulo"
+  location = latinise(location)
+  
   var locations = openWeatherLocation
    .filter( (cityJson) => cityJson.name === location )
    //Limiting to a single layer of the geo hierarchy used by openweathermap 
