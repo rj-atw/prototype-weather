@@ -7,7 +7,6 @@ const rl = readline.createInterface({input: process.stdin});
 const currentTime = moment()
 
 rl.on('line', (input) => {
-   weather.getTimeFromLocation(currentTime, input) 
-     .forEach( l => console.log(l))	
+   weather.getLocationDetails(currentTime, input).then(l => console.log(l)) 
 })
 

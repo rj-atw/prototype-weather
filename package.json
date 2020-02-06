@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "moment-timezone": "^0.5.27",
-    "request": "^2.88.0",
+    "request-promise-native": "^1.0.8",
     "tz-lookup": "^6.1.25"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "mocha": "^7.0.1"
   }
 }
