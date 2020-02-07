@@ -4,12 +4,15 @@
   "version": "0.0.1",
   "description": "looks up the weather & current time for an input set of locations and zipcodes",
   "man": "./man/weather.1",
+  "main": "weather.js",
   "scripts": {
     "prepare": "curl http://bulk.openweathermap.org/sample/current.city.list.min.json.gz | gzip -d > current.city.list.min.json",
     "test": "mocha"
   },
   "dependencies": {
+    "config": "^3.2.5",
     "moment-timezone": "^0.5.27",
+    "request": "^2.88.0",
     "request-promise-native": "^1.0.8",
     "tz-lookup": "^6.1.25"
   },

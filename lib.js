@@ -1,5 +1,9 @@
+#!/usr/bin/env node
+
 const openWeatherLocation = require('./current.city.list.min.json') 
 const tzlookup = require('tz-lookup')
+const request = require('request-promise-native')
+const config = require('config');
 
 class FindingLocationError {
   constructor(error, location, estimate) {
@@ -19,14 +23,24 @@ class LocationDetails {
   iso8601Time() { 
     return this.time.format()
   }
-}
-
-class Weather {
-  constructor() {    
+  asJson() {
+    return {
+      locationName: this.location,
+      weather: {
+        summary: this.weather.detail,
+        temp: this.weather.tempature
+      },
+      time: this.iso8601Time()
+    }
   }
 }
 
-
+class Weather {
+  constructor(detail, tempature) { 
+    this.detail = detail
+    this.tempature = tempature   
+  }
+}
 
 function getLocationDetails(currentTime, locationName) {
   const locationJsonOrError = findLocationFromName(locationName)
@@ -36,7 +50,7 @@ function getLocationDetails(currentTime, locationName) {
   
   const locationJson = locationJsonOrError
 
-  const locationWeatherPromise = Promise.resolve(null)
+  const locationWeatherPromise = getWeatherForLocation(locationJson)
 
   const locationAdjustedTime = getTimeFromLocation(currentTime, locationJson)
 
@@ -64,6 +78,24 @@ function getTimeFromLocation(currentTime, location) {
   const ianaTimezone = tzlookup(location.coord.lat, location.coord.lon)
 
   return currentTime.tz(ianaTimezone)
+}
+
+function getWeatherForLocation(locationJson) {
+  const id = locationJson.id
+  
+  return request({
+    uri:'https://api.openweathermap.org/data/2.5/weather',
+    qs: {
+      'id': id,
+      'appid': config.apiKey
+    }
+  }).then(jsonString => {
+    const json = JSON.parse(jsonString)
+    //Need to select a station for reporting weather
+    return new Weather(json.weather[0].main, json.main.temp)
+  }
+  )
+  //ToDo: catch and propagate cleaner error
 }
 
 exports.getLocationDetails = getLocationDetails  

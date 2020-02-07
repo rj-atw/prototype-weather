@@ -1,3 +1,4 @@
 current.city.list.min.json
 node_modules/
 package-lock.json
+config/*
